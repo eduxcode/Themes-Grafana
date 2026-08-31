@@ -10,7 +10,8 @@ import {
   Code, 
   Terminal, 
   Download,
-  Info
+  Info,
+  Monitor
 } from 'lucide-react';
 import { renderBusinessTemplate } from '../utils/handlebarsEngine';
 
@@ -175,20 +176,22 @@ export const ServicePresets: React.FC<ServicePresetsProps> = ({
         <div className="lg:col-span-7 space-y-4">
           {/* Active Preset Preview Box */}
           <div className="bg-[#0c0c0e] border border-zinc-800 rounded-sm overflow-hidden">
-            <div className="px-4 py-3 bg-zinc-950 border-b border-zinc-800 flex items-center justify-between">
+            <div className="px-4 py-3 bg-zinc-950 border-b border-zinc-800 flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 bg-orange-500"></span>
                 <span className="text-xs font-black uppercase tracking-wider text-white">
                   PREVIEW: {activePresetPreview.serviceName}
                 </span>
               </div>
-              <button
-                onClick={() => onSelectPreset(activePresetPreview)}
-                className="inline-flex items-center gap-1.5 bg-orange-500 hover:bg-orange-600 text-black text-xs font-black uppercase tracking-widest px-3 py-1.5 rounded-sm transition-all"
-              >
-                <Play className="w-3.5 h-3.5" />
-                <span>Customizar no Playground</span>
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => onSelectPreset(activePresetPreview)}
+                  className="inline-flex items-center gap-1.5 bg-orange-500 hover:bg-orange-600 text-black text-xs font-black uppercase tracking-widest px-3 py-1.5 rounded-sm transition-all shadow-sm"
+                >
+                  <Monitor className="w-3.5 h-3.5" />
+                  <span>Simular no Grafana</span>
+                </button>
+              </div>
             </div>
 
             <div className="p-4 bg-black overflow-x-auto min-h-[260px]">

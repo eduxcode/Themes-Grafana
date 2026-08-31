@@ -10,12 +10,13 @@ import {
   Code2,
   Terminal,
   ShieldCheck,
-  UserCheck
+  UserCheck,
+  Monitor
 } from 'lucide-react';
 
 interface HeaderProps {
-  activeTab: 'themes' | 'services' | 'ai-generator' | 'components' | 'playground';
-  setActiveTab: (tab: 'themes' | 'services' | 'ai-generator' | 'components' | 'playground') => void;
+  activeTab: 'themes' | 'services' | 'simulator' | 'ai-generator' | 'components' | 'playground';
+  setActiveTab: (tab: 'themes' | 'services' | 'simulator' | 'ai-generator' | 'components' | 'playground') => void;
   onOpenExport: () => void;
   onOpenDocs: () => void;
   canvasTheme: 'dark' | 'light';
@@ -33,7 +34,7 @@ export const Header: React.FC<HeaderProps> = ({
   activeThemeName
 }) => {
   const navItems: {
-    id: 'themes' | 'services' | 'ai-generator' | 'components' | 'playground';
+    id: 'themes' | 'services' | 'simulator' | 'ai-generator' | 'components' | 'playground';
     label: string;
     sublabel: string;
     icon: React.ComponentType<{ className?: string }>;
@@ -41,9 +42,10 @@ export const Header: React.FC<HeaderProps> = ({
   }[] = [
     { id: 'themes', label: 'Galeria', sublabel: 'Temas Prontos', icon: Palette },
     { id: 'services', label: 'Serviços', sublabel: 'AD, Fortinet, OS, etc.', icon: Cpu, badge: 'Enterprise' },
+    { id: 'simulator', label: 'Simulador', sublabel: 'Grafana em Tempo Real', icon: Monitor, badge: 'Ao Vivo' },
     { id: 'ai-generator', label: 'Gerador IA', sublabel: 'Gemini + DataViz', icon: Sparkles, badge: 'Novo' },
     { id: 'components', label: 'Componentes', sublabel: 'Gauges & Snippets', icon: Boxes },
-    { id: 'playground', label: 'Playground', sublabel: 'Live Handlebars Editor', icon: Sliders },
+    { id: 'playground', label: 'Playground', sublabel: 'Editor de Código', icon: Sliders },
   ];
 
   return (

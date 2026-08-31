@@ -5,6 +5,7 @@ import { ServicePresets } from './components/ServicePresets';
 import { AiThemeGenerator } from './components/AiThemeGenerator';
 import { ComponentLibrary } from './components/ComponentLibrary';
 import { LivePlayground } from './components/LivePlayground';
+import { GrafanaSimulator } from './components/GrafanaSimulator';
 import { ExportModal } from './components/ExportModal';
 import { GrafanaDocsModal } from './components/GrafanaDocsModal';
 import { PREBUILT_THEMES } from './data/themes';
@@ -13,7 +14,7 @@ import { REUSABLE_COMPONENTS } from './data/componentsLibrary';
 import { GrafanaTheme, ServicePreset, ReusableComponent } from './types';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'themes' | 'services' | 'ai-generator' | 'components' | 'playground'>('themes');
+  const [activeTab, setActiveTab] = useState<'themes' | 'services' | 'simulator' | 'ai-generator' | 'components' | 'playground'>('themes');
   const [themes, setThemes] = useState<GrafanaTheme[]>(PREBUILT_THEMES);
   const [activeTheme, setActiveTheme] = useState<GrafanaTheme>(PREBUILT_THEMES[0]);
   const [canvasTheme, setCanvasTheme] = useState<'dark' | 'light'>('dark');
@@ -24,11 +25,9 @@ export default function App() {
   const [exportTargetTheme, setExportTargetTheme] = useState<GrafanaTheme>(PREBUILT_THEMES[0]);
   const [aiPrefillService, setAiPrefillService] = useState<string>('');
 
-  const handleSelectTheme = (theme: GrafanaTheme, openPlayground: boolean = false) => {
+  const handleSelectTheme = (theme: GrafanaTheme, targetTab: 'playground' | 'simulator' = 'playground') => {
     setActiveTheme(theme);
-    if (openPlayground) {
-      setActiveTab('playground');
-    }
+    setActiveTab(targetTab);
   };
 
   const handleExportTheme = (theme: GrafanaTheme) => {
@@ -36,7 +35,7 @@ export default function App() {
     setIsExportOpen(true);
   };
 
-  const handleSelectPreset = (preset: ServicePreset) => {
+  const handleSelectPreset = (preset: ServicePreset, targetTab: 'playground' | 'simulator' = 'simulator') => {
     const asTheme: GrafanaTheme = {
       id: `preset-${preset.id}`,
       name: `${preset.serviceName} Panel`,
@@ -58,7 +57,7 @@ export default function App() {
       recommendedFor: [preset.serviceName]
     };
     setActiveTheme(asTheme);
-    setActiveTab('playground');
+    setActiveTab(targetTab);
   };
 
   const handleExportPreset = (preset: ServicePreset) => {
@@ -89,7 +88,7 @@ export default function App() {
   const handleApplyAiTheme = (generatedTheme: GrafanaTheme) => {
     setThemes((prev) => [generatedTheme, ...prev]);
     setActiveTheme(generatedTheme);
-    setActiveTab('playground');
+    setActiveTab('simulator');
   };
 
   const handleInsertComponent = (comp: ReusableComponent) => {
@@ -105,7 +104,7 @@ export default function App() {
     };
 
     setActiveTheme(updatedTheme);
-    setActiveTab('playground');
+    setActiveTab('simulator');
   };
 
   const handleOpenAiWithPrefill = (serviceName?: string) => {
@@ -135,7 +134,7 @@ export default function App() {
           <ThemeGallery
             themes={themes}
             activeTheme={activeTheme}
-            onSelectTheme={handleSelectTheme}
+            onSelectTheme={(theme, target) => handleSelectTheme(theme, target || 'simulator')}
             onExportTheme={handleExportTheme}
             onGoToAiGenerator={() => setActiveTab('ai-generator')}
           />
@@ -144,9 +143,22 @@ export default function App() {
         {activeTab === 'services' && (
           <ServicePresets
             presets={SERVICE_PRESETS}
-            onSelectPreset={handleSelectPreset}
+            onSelectPreset={(preset) => handleSelectPreset(preset, 'simulator')}
             onExportPreset={handleExportPreset}
             onOpenAiGenerator={handleOpenAiWithPrefill}
+          />
+        )}
+
+        {activeTab === 'simulator' && (
+          <GrafanaSimulator
+            theme={activeTheme}
+            onUpdateTheme={(updated) => setActiveTheme(updated)}
+            onOpenExport={() => {
+              setExportTargetTheme(activeTheme);
+              setIsExportOpen(true);
+            }}
+            allThemes={themes}
+            onSelectAnotherTheme={(thm) => setActiveTheme(thm)}
           />
         )}
 

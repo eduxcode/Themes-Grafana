@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { GrafanaTheme, ThemeCategory } from '../types';
-import { Palette, Play, Eye, Sparkles, Check, Download } from 'lucide-react';
+import { Palette, Play, Eye, Sparkles, Check, Download, Monitor } from 'lucide-react';
 import { renderBusinessTemplate } from '../utils/handlebarsEngine';
 
 interface ThemeGalleryProps {
   themes: GrafanaTheme[];
   activeTheme: GrafanaTheme;
-  onSelectTheme: (theme: GrafanaTheme, openPlayground?: boolean) => void;
+  onSelectTheme: (theme: GrafanaTheme, targetTab?: 'playground' | 'simulator') => void;
   onExportTheme: (theme: GrafanaTheme) => void;
   onGoToAiGenerator: () => void;
 }
@@ -172,22 +172,33 @@ export const ThemeGallery: React.FC<ThemeGalleryProps> = ({
               </div>
 
               {/* Card Footer Actions */}
-              <div className="p-5 pt-3 border-t border-zinc-800/80 bg-zinc-950 flex items-center justify-between gap-2">
-                <button
-                  onClick={() => onSelectTheme(theme, true)}
-                  className="flex-1 inline-flex items-center justify-center gap-1.5 bg-zinc-900 hover:bg-orange-500 text-zinc-200 hover:text-black text-xs font-black uppercase tracking-wider py-2 px-3 rounded-sm border border-zinc-800 hover:border-orange-500 transition-all active:scale-95"
-                >
-                  <Play className="w-3 h-3" />
-                  <span>Editar no Playground</span>
-                </button>
+              <div className="p-5 pt-3 border-t border-zinc-800/80 bg-zinc-950 flex flex-col gap-2">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => onSelectTheme(theme, 'simulator')}
+                    className="flex-1 inline-flex items-center justify-center gap-1.5 bg-orange-500 hover:bg-orange-600 text-black text-xs font-black uppercase tracking-wider py-2 px-3 rounded-sm shadow-sm transition-all active:scale-95"
+                    title="Simular no Grafana em tempo real"
+                  >
+                    <Monitor className="w-3.5 h-3.5" />
+                    <span>Simular no Grafana</span>
+                  </button>
 
-                <button
-                  onClick={() => onExportTheme(theme)}
-                  className="inline-flex items-center justify-center gap-1 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white p-2 rounded-sm border border-zinc-800 transition-colors"
-                  title="Exportar Painel JSON / HTML"
-                >
-                  <Download className="w-4 h-4" />
-                </button>
+                  <button
+                    onClick={() => onSelectTheme(theme, 'playground')}
+                    className="inline-flex items-center justify-center gap-1 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white py-2 px-2.5 rounded-sm border border-zinc-800 transition-colors text-xs font-mono"
+                    title="Editar Código no Playground"
+                  >
+                    <Play className="w-3 h-3" />
+                  </button>
+
+                  <button
+                    onClick={() => onExportTheme(theme)}
+                    className="inline-flex items-center justify-center gap-1 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white p-2 rounded-sm border border-zinc-800 transition-colors"
+                    title="Exportar Painel JSON / HTML"
+                  >
+                    <Download className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </div>
           );
