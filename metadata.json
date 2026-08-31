@@ -1,0 +1,6 @@
+{
+  "name": "Grafana Business Text Theme Studio",
+  "description": "Estúdio moderno de temas, gerador visual e biblioteca de componentes para o plugin Business Text do Grafana com custom CSS e IA.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
